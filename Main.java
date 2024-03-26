@@ -1,6 +1,6 @@
 import javax.swing.*;
 
-public class Main {
+public class  Main {
     public static void main(String[] args) throws Exception {
         int boardWidth = 640;
         int boardHeight = 640;

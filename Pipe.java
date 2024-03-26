@@ -5,18 +5,20 @@ import java.util.Random;
 import javax.swing.*;
 
 public class Pipe {
-    private int boardWidth = 640;
-    private int boardHeight = 640;
+   private int boardWidth = 640;
+   private int boardHeight = 640;
 
 
-    private int pipeX = boardWidth;
+    private int pipeX = 640;
     private int pipeY= 0;
     private int pipeWidth = 64;
     private int pipeHeight = 512;
 
 
-    Image img;
+    private Image img;
     private boolean passed = false;
+
+
 
     public Pipe(Image img){
         this.img = img;

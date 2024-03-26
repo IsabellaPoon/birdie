@@ -6,14 +6,15 @@ public class Bird{
 
     private int birdX = boardWidth/8;
     private int birdY = boardHeight/2;
-    private int birdWidth = 34;
-    private int birdHeight = 24;
-
-    Image img;
+    private int birdWidth = 350;
+    private int birdHeight = 300;
+    private final Image img;
 
     public Bird(Image img){
         this.img = img;
     }
+
+    public Image getImg() { return img; }
 
     public int getX() {
         return birdX;
@@ -23,12 +24,10 @@ public class Bird{
         return birdY;
     }
 
-    public int getWidth(){
-        return birdWidth;
-    }
+    public int getWidth(){ return this.birdWidth; }
 
     public int getHeight(){
-        return birdHeight;
+        return this.birdHeight;
     }
 
     public void setY(int i){

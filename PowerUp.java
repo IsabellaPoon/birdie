@@ -1,11 +1,12 @@
 import java.awt.*;
 
 public class PowerUp {
-    private int x;
-    private int y;
-    private int width;
-    private int height;
+    private int x = 640;
+    private int y = 0;
+    private int width = 15;
+    private int height = 10;
     private Image img;
+
 
     public PowerUp(int x, int y, int width, int height, Image img) {
         this.x = x;
