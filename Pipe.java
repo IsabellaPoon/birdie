@@ -9,21 +9,16 @@ public class Pipe {
    private int boardHeight = 640;
 
 
-    private int pipeX = 640;
+    private int pipeX = boardWidth;
     private int pipeY= 0;
     private int pipeWidth = 64;
     private int pipeHeight = 512;
-
-
     private Image img;
     private boolean passed = false;
-
-
 
     public Pipe(Image img){
         this.img = img;
     }
-
 
     public int getX() {
         return pipeX;

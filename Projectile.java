@@ -83,9 +83,4 @@ public class Projectile {
         return isPowerUp;
     }
 
-    public void move() {
-        x += velocityX;
-        y += velocityY;
-    }
-
 }
