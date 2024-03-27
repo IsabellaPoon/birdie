@@ -7,20 +7,20 @@ public class PowerUp {
     private int height = 40;
     private Image img;
 
-
     public PowerUp(Image img) {
         this.img = img;
-//    public PowerUp(int x, int y, int width, int height, Image img) {
-//        this.x = x;
-//        this.y = y;
-//        this.img = img;
-//    }
+        // public PowerUp(int x, int y, int width, int height, Image img) {
+        // this.x = x;
+        // this.y = y;
+        // this.img = img;
+        // }
     }
+
     public int getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void incrementX(int x) {
         this.x = this.x + x;
     }
 
@@ -40,10 +40,8 @@ public class PowerUp {
         return height;
     }
 
-
     public Image getImage() {
         return img;
     }
-
 
 }

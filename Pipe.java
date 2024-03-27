@@ -5,18 +5,17 @@ import java.util.Random;
 import javax.swing.*;
 
 public class Pipe {
-   private int boardWidth = 640;
-   private int boardHeight = 640;
-
+    private int boardWidth = 640;
+    private int boardHeight = 640;
 
     private int pipeX = boardWidth;
-    private int pipeY= 0;
+    private int pipeY = 0;
     private int pipeWidth = 64;
     private int pipeHeight = 512;
     private Image img;
     private boolean passed = false;
 
-    public Pipe(Image img){
+    public Pipe(Image img) {
         this.img = img;
     }
 
@@ -24,34 +23,35 @@ public class Pipe {
         return pipeX;
     }
 
-    public int getY(){
+    public int getY() {
         return pipeY;
     }
 
-    public int getWidth(){
+    public int getWidth() {
         return pipeWidth;
     }
 
-    public int getHeight(){
+    public int getHeight() {
         return pipeHeight;
     }
 
-    public void setX(int i){
-        pipeX+=i;
+    public void incrementX(int i) {
+        pipeX += i;
     }
 
-    public boolean getPassed(){
+    public boolean getPassed() {
         return passed;
     }
 
-    public void setPassed(){
+    public void setPassed() {
         passed = true;
     }
-    public Image getImg(){
+
+    public Image getImg() {
         return this.img;
     }
 
-    public void setY(int i){
+    public void setY(int i) {
         pipeY = i;
     }
 }

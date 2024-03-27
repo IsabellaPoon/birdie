@@ -12,7 +12,7 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
     private ArrayList<PowerUp> powerUps;
 
     private static final double luckySpawnProbability = 1;
-    private double powerPicker = (double) 1 /3;
+    private double powerPicker = (double) 1 / 3;
 
     private int pipeCount = 0;
 
@@ -23,7 +23,7 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
     private int randomPipeY;
     private int space;
 
-        //IMAGES//
+    // IMAGES//
     private Image fireImg;
     private Image powerUpImg;
     private Image birdImg;
@@ -31,7 +31,6 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
     private Image topPipeImg;
     private Image bottomPipeImg;
     private Image backgroundImg;
-
 
     private Bird bird;
     private Bird fireBird;
@@ -47,7 +46,7 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
     private boolean gameOver = false;
     private double score = 0;
 
-    public BirdFlapping(){
+    public BirdFlapping() {
         setPreferredSize(new Dimension(boardWidth, boardHeight));
         setFocusable(true);
         addKeyListener(this);
@@ -61,18 +60,17 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
         fireBirdImg = new ImageIcon(getClass().getResource("./smallbird.png")).getImage();
         birdImg = new ImageIcon(getClass().getResource("./flappybird.png")).getImage();
 
-        //inheritance here
+        // inheritance here
         bird = new Bird(birdImg);
         fireBird = new Bird(fireBirdImg);
-
 
         projectiles = new ArrayList<>();
         powerUps = new ArrayList<>();
         pipes = new ArrayList<>();
 
-        pipeLoop = new Timer(1500, new ActionListener(){
+        pipeLoop = new Timer(1500, new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent e) {
 
                 placePipes();
             }
@@ -80,11 +78,11 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
 
         pipeLoop.start();
 
-        loop = new Timer(1000/60, this);
+        loop = new Timer(1000 / 30, this);
         loop.start();
     }
 
-    public void paintComponent(Graphics g){
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
         draw(g);
 
@@ -93,7 +91,8 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
     public void draw(Graphics g) {
         g.drawImage(backgroundImg, 0, 0, boardWidth, boardHeight, null);
 
-//        g.drawImage(fireBird.getImg(), bird.getX(), bird.getY(), bird.getWidth(), bird.getHeight(), null);
+        // g.drawImage(fireBird.getImg(), bird.getX(), bird.getY(), bird.getWidth(),
+        // bird.getHeight(), null);
         g.drawImage(bird.getImg(), bird.getX(), bird.getY(), 34, 24, null);
 
         for (Pipe pipe : pipes) {
@@ -101,11 +100,13 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
         }
 
         for (Projectile projectile : projectiles) {
-            g.drawImage(fireImg, projectile.getX(), projectile.getY(), projectile.getWidth(), projectile.getHeight(), null);
+            g.drawImage(fireImg, projectile.getX(), projectile.getY(), projectile.getWidth(), projectile.getHeight(),
+                    null);
         }
 
         for (PowerUp powerUp : powerUps) {
-            g.drawImage(powerUp.getImage(), powerUp.getX(), powerUp.getY(), powerUp.getWidth(), powerUp.getHeight(), null);
+            g.drawImage(powerUp.getImage(), powerUp.getX(), powerUp.getY(), powerUp.getWidth(), powerUp.getHeight(),
+                    null);
         }
 
         g.setColor(Color.white);
@@ -117,59 +118,61 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
         }
     }
 
-    public void move(){
-        velocityY +=gravity;
+    public void move() {
+        velocityY += gravity;
         bird.setY(velocityY);
 
-        for(int i = 0; i<pipes.size(); i++){
+        for (int i = 0; i < pipes.size(); i++) {
             Pipe pipe = pipes.get(i);
-            pipe.setX(velocityX);
+            pipe.incrementX(velocityX);
 
-            if(!pipe.getPassed() && bird.getX() > pipe.getX() + pipe.getWidth()){
+            if (!pipe.getPassed() && bird.getX() > pipe.getX() + pipe.getWidth()) {
                 pipe.setPassed();
-                score+=0.5;
+                score += 0.5;
             }
-            if(collides(bird, pipe)){
+            if (collides(bird, pipe)) {
                 gameOver = true;
             }
         }
 
         for (PowerUp powerup : powerUps) {
-            powerup.setX(velocityX);
+            powerup.incrementX(velocityX);
             if (collideswithpower(bird, powerup)) {
                 System.out.println("yum");
             }
         }
 
-        if (bird.getY() > boardHeight){
+        if (bird.getY() > boardHeight) {
             gameOver = true;
         }
 
     }
 
-    public boolean collideswithpower(Bird a, PowerUp p){
-        return a.getX()<p.getX() + p.getWidth() &&
-                a.getX() + a.getWidth()> p.getX() &&
-                a.getY()<p.getY() + p.getHeight() &&
-                a.getY() + a.getHeight()> p.getY();
+    public boolean collideswithpower(Bird a, PowerUp p) {
+        return a.getX() < p.getX() + p.getWidth() &&
+                a.getX() + a.getWidth() > p.getX() &&
+                a.getY() < p.getY() + p.getHeight() &&
+                a.getY() + a.getHeight() > p.getY();
     }
-    public boolean collides(Bird a, Pipe b){
-        return a.getX()<b.getX() + b.getWidth() &&
-                a.getX() + a.getWidth()> b.getX() &&
-                a.getY()<b.getY() + b.getHeight() &&
-                a.getY() + a.getHeight()> b.getY();
+
+    public boolean collides(Bird a, Pipe b) {
+        return a.getX() < b.getX() + b.getWidth() &&
+                a.getX() + a.getWidth() > b.getX() &&
+                a.getY() < b.getY() + b.getHeight() &&
+                a.getY() + a.getHeight() > b.getY();
     }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         move();
         repaint();
-        if (gameOver){
+        if (gameOver) {
             pipeLoop.stop();
             loop.stop();
         }
     }
 
-    public void randomPower(){
+    public void randomPower() {
 
     }
 
@@ -189,32 +192,44 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
         pipes.add(pipey);
 
         // Check if it's time to spawn a power-up based on the number of pipes spawned
+
         if (pipeCount % 20 == 0 || Math.random() < luckySpawnProbability) {
+
+            powerup = new PowerUp(powerUpImg);
             // creates the range for powerUp Y posit
-            int minY = Math.max(piper.getY() + piper.getHeight(), 0); // Ensure it's below the top pipe
-            int maxY = Math.min(pipey.getY(), boardHeight - powerUpImg.getHeight(null)); // Ensure it's above the bottom pipe
+            int minY = Math.max(piper.getY() + piper.getHeight(), 0); // Ensure it's below the
+                                                                      // top pipe
+            int maxY = Math.min(pipey.getY() - powerup.getHeight(), boardHeight); // Ensure
+            // it's
+            // above
+            // the
+            // bottom
+            // pipe
+
+            assert minY < maxY;
 
             // creates a random Y position in range
             int powerUpY = (int) (minY + Math.random() * (maxY - minY));
-            int powerUpX = 640;
+            int powerUpX = piper.getX();
+
             System.out.println("Power-up spawned at (" + powerUpX + ", " + powerUpY + ")");
-            powerup = new PowerUp(powerUpImg);
+
             System.out.println("PowerUpX orig value: " + powerup.getImage().getWidth(null));
             System.out.println("PowerUpY orig value: " + powerup.getImage().getHeight(null));
-//            PowerUp powerUp = new PowerUp(powerUpX, powerUpY, 35, 30, powerUpImg);
+            // PowerUp powerUp = new PowerUp(powerUpX, powerUpY, 35, 30, powerUpImg);
             powerup.setY(powerUpY);
-            powerup.setX(powerUpX);
+            powerup.incrementX(piper.getWidth() / 2 - powerup.getWidth() / 2);
             powerUps.add(powerup);
 
         }
-    }
 
+    }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_SPACE){
-            velocityY= -9;
-            if(gameOver){
+        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+            velocityY = -9;
+            if (gameOver) {
                 bird.resetY();
                 velocityY = 0;
                 pipes.clear();
@@ -234,7 +249,7 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
             int projectileVelocityY = 0;
             Projectile newProjectile = new Projectile(bird.getX(), bird.getY(),
                     projectileVelocityX, projectileVelocityY,
-                     width, height, fireImg);
+                    width, height, fireImg);
             projectiles.add(newProjectile);
         }
     }
@@ -254,7 +269,10 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {    }
+    public void keyTyped(KeyEvent e) {
+    }
+
     @Override
-    public void keyReleased(KeyEvent e) {}
+    public void keyReleased(KeyEvent e) {
+    }
 }
