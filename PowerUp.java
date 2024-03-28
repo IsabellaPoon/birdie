@@ -10,8 +10,6 @@ public class PowerUp {
 
     private boolean collided = false;
 
-    private boolean isPowerUp;
-
     public boolean hasCollided() {
         return collided;
     }
@@ -47,10 +45,17 @@ public class PowerUp {
     public Image getImage() {
         return img;
     }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
 
-    public boolean isPowerUp() {
-        return isPowerUp;
+        PowerUp powerUp = (PowerUp) obj;
+        return this.toString().equals(powerUp.toString());
     }
 
-
+    @Override
+    public String toString() {
+        return "PowerUp position: (" + x + ", " + y + ")";
+    }
 }

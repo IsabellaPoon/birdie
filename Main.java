@@ -17,63 +17,86 @@ public class  Main {
         frame.pack();
         flaps.requestFocus();
         frame.setVisible(true);
-    ArrayList<Integer> nums = new ArrayList<>();
-        for(int i = 0; i < 10; i++) System.out.println(nums.add(i));
+        ArrayList<Integer> nums = new ArrayList<>();
+        for (int i = 0; i < 10; i++) System.out.println(nums.add(i));
         System.out.println(nums.size());
         nums.add(2, 3);
         System.out.println(nums.get(2));
         System.out.println(nums.set(4, 5));
         System.out.println(nums.remove(8));
         System.out.println(numsdeler(nums, 3));
-    ArrayList<Integer> num2 = new ArrayList<>();
+        ArrayList<Integer> num2 = new ArrayList<>();
         num2.add(23);
         num2.add(34);
         num2.add(65);
         num2.add(11);
         num2.add(98);
-    printerer(num2);
-    selectionSorterer(num2);
+        printerer(num2);
+        selectionSorterer(num2);
         System.out.println();
-    ArrayList<Integer> num5 = new ArrayList<>();
+        ArrayList<Integer> num5 = new ArrayList<>();
         num5.add(23);
         num5.add(654);
         num5.add(32);
         num5.add(65);
         num5.add(1);
-    printerer(num5);
-    insertionSorterer(num5);
+        printerer(num5);
+        insertionSorterer(num5);
         System.out.println();
 
-    int[][] numbers = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+        int[][] numbers = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
         for (int r = 0; r < numbers.length; r++) {
-        for (int c = 0; c < numbers[0].length; c++) {
-            System.out.println(numbers[r][c]);
+            for (int c = 0; c < numbers[0].length; c++) {
+                System.out.println(numbers[r][c]);
+            }
         }
-    }
 
         for (int c = 0; c < numbers[0].length; c++) {
-        for (int r = 0; r < numbers.length; r++) {
-            System.out.println(numbers[r][c]);
+            for (int r = 0; r < numbers.length; r++) {
+                System.out.println(numbers[r][c]);
+            }
         }
-    }
 
         for (int[] x : numbers) {
-        for (int y : x) {
-            System.out.println(y);
+            for (int y : x) {
+                System.out.println(y);
+            }
         }
-    }
 
-    Football footy = new Football(5, "Adri");
-    Football foots = new Football();
+        Football footy = new Football(5, "Adri");
+        Football foots = new Football();
         footy.inflate(4);
         footy.drop(-2);
-    Ball footer = new Football();
-    pop(footy);
-    Ball[] list = {footer, new Football()};
-    ArrayList<Ball> baller = new ArrayList<Ball>();
+        Ball footer = new Football();
+        pop(footy);
+        Ball[] list = {footer, new Football()};
+        ArrayList<Ball> baller = new ArrayList<Ball>();
         baller.add(footer);
         baller.add(new Football());
-}
+        int[][] twoDArray = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+
+        for (int i = 0; i < twoDArray.length; i++) {
+            for (int j = 0; j < twoDArray[i].length; j++) {
+                int element = twoDArray[i][j];
+            }
+        }
+
+        for (int j = 0; j < twoDArray[0].length; j++) {
+            for (int i = 0; i < twoDArray.length; i++) {
+                int element = twoDArray[i][j];
+            }
+        }
+
+        for (int[] row : twoDArray) {
+            for (int element : row) {
+            }
+        }
+
+        for (int[] row : twoDArray) {
+            for (int element : row) {
+            }
+        }
+    }
 
     public static Ball pop(Ball b) {
         b.faster();
@@ -118,6 +141,7 @@ public class  Main {
         percy.set(p, percy.get(a));
         percy.set(a, pause);
     }
+
     public static void selectionSorterer(ArrayList<Integer> percy) {
         int swapperupper = 0;
         for (int i = 0; i < percy.size(); i++) {

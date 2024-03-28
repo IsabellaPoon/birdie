@@ -15,7 +15,6 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
     private ArrayList<Projectile> projectiles;
     private ArrayList<PowerUp> powerUps;
 
-    private Timer invincibilityTimer;
 
     private static final double luckySpawnProbability = 1;
 
@@ -385,5 +384,13 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
     @Override
     public void keyReleased(KeyEvent e) {
     }
+    @Override
+    public boolean equals(Object obj) {
+        return obj.toString().equals(this.toString());
+    }
 
+    @Override
+    public String toString() {
+        return "Game size:" + boardWidth + ", " + boardHeight + ")";
+    }
 }

@@ -6,7 +6,6 @@ import javax.swing.*;
 
 public class Pipe {
     private int boardWidth = 640;
-    private int boardHeight = 640;
 
     private int pipeX = boardWidth;
     private int pipeY = 0;
@@ -54,4 +53,13 @@ public class Pipe {
     public void setY(int i) {
         pipeY = i;
     }
+    @Override
+    public boolean equals(Object obj) {
+        return obj.toString().equals(this.toString());
+    }
+@Override
+    public String toString() {
+        return "Pipe position: (" + pipeX + ", " + pipeY + ")";
+    }
+
 }

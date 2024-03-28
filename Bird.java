@@ -14,8 +14,6 @@
             this.img = img;
         }
 
-        public Image getImg() { return img; }
-
         public int getX() {
             return birdX;
         }
@@ -37,7 +35,15 @@
         public void resetY(){
             birdY = boardHeight/2;
         }
+        @Override
+        public boolean equals(Object obj) {
+            return obj.toString().equals(this.toString());
+        }
+        @Override
+        public String toString() {
+            return "Bird position: (" + birdX + ", " + birdY + ")";
+        }
 
-        public void setImage(Image fireBirdImg) {
+        public void setImage(Image starBirdImg) {
         }
     }
