@@ -2,18 +2,20 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import javax.swing.*;
+import javax.swing.Timer;
+
 
 public class BirdFlapping extends JPanel implements ActionListener, KeyListener {
+    private final long minShotInterval = 5000;
+    private long lastShotTime = 0;
     private final int boardWidth = 640;
     private final int boardHeight = 640;
-    private long lastFireTime = 0;
-    private final long fireCooldown = 500;
-
     private ArrayList<Projectile> projectiles;
     private ArrayList<PowerUp> powerUps;
 
-    int counter = 0;
+    private Timer invincibilityTimer;
 
     private static final double luckySpawnProbability = 1;
 
@@ -44,22 +46,20 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
     private Image bottomPipeImg;
     private Image backgroundImg;
     private Image starBirdImg;
-    private Image iceBirdImg;
 
     private Bird bird;
-    private Bird fireBird;
     private Pipe piper;
     private Pipe pipey;
 
     private PowerUp powerup;
     private ArrayList<Pipe> pipes;
     private Timer loop;
-
     private Timer pipeLoop;
+    private Timer resetBirdTimer;
+    private int countdownSeconds = 15;
     private boolean gameOver = false;
     private double score = 0;
 
-    private boolean star = false;
 
     public BirdFlapping() {
         setPreferredSize(new Dimension(boardWidth, boardHeight));
@@ -73,21 +73,31 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
         fireImg = new ImageIcon(getClass().getResource("./fire.png")).getImage();
         powerUpImg = new ImageIcon(getClass().getResource("./powerup.png")).getImage();
         fireBirdImg = new ImageIcon(getClass().getResource("./firebird.png")).getImage();
-        iceBirdImg = new ImageIcon(getClass().getResource("./iceBird.png")).getImage();
         birdImg = new ImageIcon(getClass().getResource("./bird.png")).getImage();
         starBirdImg = new ImageIcon(getClass().getResource("./starbird.png")).getImage();
         currentBirdImage = birdImg; // Set initial image
 
         // inheritance here
         bird = new Bird(birdImg);
-        fireBird = new Bird(fireBirdImg);
-//        starBird = new Bird(starBirdImg);
-//        iceBird = new Bird(iceBirdImg);
         projectiles = new ArrayList<>();
         powerUps = new ArrayList<>();
         pipes = new ArrayList<>();
 
 
+        resetBirdTimer = new Timer(1000, new ActionListener() { // Timer ticks every second
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                countdownSeconds--; // Decrease countdown seconds
+                if (countdownSeconds <= 0) {
+                    currentPowerUp = PowerUpType.NONE;
+                    updateBirdImage();
+                    repaint();
+                    resetBirdTimer.stop(); // Stop the timer after resetting the bird image
+                }else {
+                    repaint();
+                }
+            }
+        });
         pipeLoop = new Timer(1500, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -105,8 +115,30 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         draw(g);
+        if (currentPowerUp != PowerUpType.NONE) {
+            drawCountdownTimer(g);
+        }
     }
 
+    public void moveProjectiles() {
+        Iterator<Projectile> iterator = projectiles.iterator();
+        while (iterator.hasNext()) {
+            Projectile projectile = iterator.next();
+            projectile.move(3); // Move the projectile
+
+            // Check collision with pipes
+            Iterator<Pipe> pipeIterator = pipes.iterator();
+            while (pipeIterator.hasNext()) {
+                Pipe pipe = pipeIterator.next();
+                if (collideswfire(projectile, pipe)) {
+                    // Remove the projectile and pipe if collision detected
+                    iterator.remove();
+                    pipeIterator.remove();
+                    break;
+                }
+            }
+        }
+    }
     public void draw(Graphics g) {
         g.drawImage(backgroundImg, 0, 0, boardWidth, boardHeight, null);
 
@@ -120,11 +152,10 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
             g.drawImage(powerUp.getImage(), powerUp.getX(), powerUp.getY(), powerUp.getWidth(), powerUp.getHeight(),
                     null);
         }
-        if(counter > 0){
-            counter--;
-            for(Projectile projectile : projectiles){
-                g.drawImage(projectile.getImage(), projectile.getX(), projectile.getY(), projectile.getWidth(),projectile.getHeight(),null);
-            }
+
+        for (Projectile projectile : projectiles) {
+            g.drawImage(projectile.getImage(), projectile.getX(), projectile.getY(),
+                    projectile.getWidth(), projectile.getHeight(), null);
         }
 
         g.setColor(Color.white);
@@ -135,6 +166,7 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
             drawGameOverScreen(g);
         }
     }
+
 
     public void move() {
         velocityY += gravity;
@@ -188,10 +220,21 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
     @Override
     public void actionPerformed(ActionEvent e) {
         move();
+        moveProjectiles();
         repaint();
+        if (currentPowerUp != PowerUpType.NONE) {
+            countdownSeconds--; // Decrease countdown seconds
+            if (countdownSeconds <= 0) {
+                currentPowerUp = PowerUpType.NONE; // Reset the power-up type
+                updateBirdImage(); // Update the bird image accordingly
+                resetBirdTimer.stop(); // Stop the countdown timer
+            }
+        }
+
         if (gameOver) {
-            pipeLoop.stop();
-            loop.stop();
+            pipeLoop.stop(); // Stop the pipe loop timer
+            loop.stop(); // Stop the main game loop timer
+            resetBirdTimer.stop(); // Stop the countdown timer
         }
     }
     private void updateBirdImage() {
@@ -207,9 +250,11 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
                 break;
         }
     }
+
     public void randomPower() {
+        countdownSeconds = 150; // Reset the countdown timer to its initial value
+        resetBirdTimer.start(); // Start the countdown timer
         double randomValue = Math.random();
-        // 50% chance
         if (randomValue < 0.5) {
             bird.setImage(fireBirdImg);
             currentPowerUp = PowerUpType.FIRE;
@@ -237,7 +282,7 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
         pipes.add(pipey);
 
         // Check if it's time to spawn a power-up based on the number of pipes spawned
-        if (pipeCount % 20 == 0 || Math.random() < luckySpawnProbability) {
+        if ((pipeCount % 20 == 0 || Math.random() < luckySpawnProbability) && currentPowerUp == PowerUpType.NONE) {
 
             powerup = new PowerUp(powerUpImg);
             // creates the range for powerUp Y posit
@@ -261,8 +306,14 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             velocityY = -9;
+            if (currentPowerUp != PowerUpType.NONE) {
+                resetBirdTimer.restart(); // Restart the timer
+            }
             if (gameOver) {
                 currentPowerUp = PowerUpType.NONE;
+                updateBirdImage();
+                repaint();
+                resetBirdTimer.stop();
                 bird.resetY();
                 velocityY = 0;
                 pipes.clear();
@@ -274,21 +325,30 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
 
             }
         }
+
         else if (e.getKeyCode() == KeyEvent.VK_E) {
-            // Fire projectile action
-            if (currentPowerUp == PowerUpType.FIRE && System.currentTimeMillis() - lastFireTime >= fireCooldown) {
-                // Perform firing action only if the bird has the fire power-up
-                counter++;
-                // Create a new projectile at bird's position, moving to the right
-                int projectileVelocityX = 5;
-                int projectileVelocityY = 0;
+            long currentTime = System.currentTimeMillis();
+            if (currentPowerUp == PowerUpType.FIRE && currentTime - lastShotTime >= minShotInterval) {
+                // Create a new projectile
                 Projectile projectile = new Projectile(fireImg);
                 projectile.setX(bird.getX());
                 projectile.setY(bird.getY());
                 projectiles.add(projectile);
-                lastFireTime = System.currentTimeMillis();
+
+                // Update last shot time
+                lastShotTime = currentTime;
             }
         }
+    }
+
+    private void drawCountdownTimer(Graphics g) {
+        g.setColor(Color.white);
+        g.setFont(new Font("Arial", Font.BOLD, 50));
+        String countdownString = "Timer: " + countdownSeconds;
+        FontMetrics metrics = g.getFontMetrics();
+        int x = (getWidth() - metrics.stringWidth(countdownString)) / 2;
+        int y = 40;
+        g.drawString(countdownString, x, y);
     }
 
     public void drawGameOverScreen(Graphics g) {

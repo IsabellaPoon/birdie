@@ -6,8 +6,8 @@ public class Projectile {
     private int y;
     private int velocityX;
     private int velocityY;
-    private int width;
-    private int height;
+    private int width = 35;
+    private int height = 25;
     private Image image;
 
     private boolean isPowerUp;
@@ -77,6 +77,10 @@ public class Projectile {
     }
 
     public void incrementX(int x) {
+        this.x = this.x + x;
+    }
+
+    public void move(int x) {
         this.x = this.x + x;
     }
 }

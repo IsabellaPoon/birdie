@@ -118,7 +118,6 @@ public class  Main {
         percy.set(p, percy.get(a));
         percy.set(a, pause);
     }
-
     public static void selectionSorterer(ArrayList<Integer> percy) {
         int swapperupper = 0;
         for (int i = 0; i < percy.size(); i++) {
