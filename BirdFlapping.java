@@ -8,7 +8,7 @@ import javax.swing.Timer;
 
 
 public class BirdFlapping extends JPanel implements ActionListener, KeyListener {
-    private final long minShotInterval = 5000;
+    private final long minShotInterval = 500;
     private long lastShotTime = 0;
     private final int boardWidth = 640;
     private final int boardHeight = 640;
@@ -84,7 +84,7 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
         pipes = new ArrayList<>();
 
 
-        resetBirdTimer = new Timer(1000, new ActionListener() { // Timer ticks every second
+        resetBirdTimer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 countdownSeconds--; // Decrease countdown seconds
@@ -177,7 +177,8 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
                 pipe.setPassed();
                 score += 0.5;
             }
-            if (collides(bird, pipe)) {
+
+            if (currentPowerUp != PowerUpType.STAR && collides(bird, pipe)) {
                 gameOver = true;
             }
         }
@@ -211,10 +212,14 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
     }
 
     public boolean collides(Bird a, Pipe b) {
-        return a.getX() < b.getX() + b.getWidth() &&
-                a.getX() + a.getWidth() > b.getX() &&
-                a.getY() < b.getY() + b.getHeight() &&
-                a.getY() + a.getHeight() > b.getY();
+        // Check for collision only if the bird is not under star power-up effect
+        if (currentPowerUp != PowerUpType.STAR) {
+            return a.getX() < b.getX() + b.getWidth() &&
+                    a.getX() + a.getWidth() > b.getX() &&
+                    a.getY() < b.getY() + b.getHeight() &&
+                    a.getY() + a.getHeight() > b.getY();
+        }
+        return false; // If under star power-up, consider no collision
     }
 
     @Override
@@ -252,7 +257,7 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
     }
 
     public void randomPower() {
-        countdownSeconds = 150; // Reset the countdown timer to its initial value
+        countdownSeconds = 250; // Reset the countdown timer to its initial value
         resetBirdTimer.start(); // Start the countdown timer
         double randomValue = Math.random();
         if (randomValue < 0.5) {
@@ -281,8 +286,16 @@ public class BirdFlapping extends JPanel implements ActionListener, KeyListener 
         pipey.setY(piper.getY() + piper.getHeight() + space);
         pipes.add(pipey);
 
+        boolean powerUpActive = false;
+        for (PowerUp existingPowerUp : powerUps) {
+            if (!existingPowerUp.hasCollided()) {
+                powerUpActive = true;
+                break;
+            }
+        }
+
         // Check if it's time to spawn a power-up based on the number of pipes spawned
-        if ((pipeCount % 20 == 0 || Math.random() < luckySpawnProbability) && currentPowerUp == PowerUpType.NONE) {
+        if (!powerUpActive && (pipeCount % 20 == 0 || Math.random() < luckySpawnProbability) && currentPowerUp == PowerUpType.NONE) {
 
             powerup = new PowerUp(powerUpImg);
             // creates the range for powerUp Y posit
