@@ -6,8 +6,8 @@
 
         private int birdX = boardWidth/8;
         private int birdY = boardHeight/2;
-        private int birdWidth = 34; //350
-        private int birdHeight = 24; //300
+        private int birdWidth = 45;
+        private int birdHeight = 40;
         private final Image img;
 
         public Bird(Image img){
@@ -36,5 +36,8 @@
         }
         public void resetY(){
             birdY = boardHeight/2;
+        }
+
+        public void setImage(Image fireBirdImg) {
         }
     }

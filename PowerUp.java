@@ -1,20 +1,24 @@
 import java.awt.*;
 
 public class PowerUp {
+
     private int x = 640;
     private int y = 0;
     private int width = 45;
     private int height = 40;
     private Image img;
 
-    public PowerUp(Image img) {
-        this.img = img;
-        // public PowerUp(int x, int y, int width, int height, Image img) {
-        // this.x = x;
-        // this.y = y;
-        // this.img = img;
-        // }
+    private boolean collided = false;
+
+    private boolean isPowerUp;
+
+    public boolean hasCollided() {
+        return collided;
     }
+    public void setCollided(boolean collided) {
+        this.collided = collided;
+    }
+    public PowerUp(Image img) { this.img = img; }
 
     public int getX() {
         return x;
@@ -43,5 +47,10 @@ public class PowerUp {
     public Image getImage() {
         return img;
     }
+
+    public boolean isPowerUp() {
+        return isPowerUp;
+    }
+
 
 }

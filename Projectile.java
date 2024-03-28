@@ -1,6 +1,7 @@
 import java.awt.*;
 
 public class Projectile {
+    public int setX;
     private int x;
     private int y;
     private int velocityX;
@@ -11,15 +12,7 @@ public class Projectile {
 
     private boolean isPowerUp;
 
-    public Projectile(int x, int y, int velocityX, int velocityY, int width, int height, Image image) {
-        this.x = x;
-        this.y = y;
-        this.velocityX = velocityX;
-        this.velocityY = velocityY;
-        this.width = width;
-        this.height = height;
-        this.image = image;
-    }
+    public Projectile(Image img) { this.image = img; }
 
     // Getters and Setters for position, velocity, width, height, and image
 
@@ -83,4 +76,7 @@ public class Projectile {
         return isPowerUp;
     }
 
+    public void incrementX(int x) {
+        this.x = this.x + x;
+    }
 }
