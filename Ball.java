@@ -15,16 +15,11 @@ public class Ball {
     public String toString(){
         return owner;
     }
-
     public boolean equals(Ball b){
         return b.toString().equals(this.toString());
     }
 
-    public void faster(){
-        velocityx+=10;
-    }
+    public void faster(){ velocityx+=10; }
 
-    public void inflate(int x){
-        bounce +=x;
-    }
+    public void inflate(int x){ bounce +=x;}
 }
