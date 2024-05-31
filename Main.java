@@ -11,6 +11,12 @@ public class  Main {
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        BirdFlapping flaps = new BirdFlapping();
+        frame.add(flaps);
+        frame.pack();
+        flaps.requestFocus();
+        frame.setVisible(true);
+        
 
         ArrayList<Integer> nums = new ArrayList<>();
         for( int i = 0; i<10; i++) System.out.println(nums.add(i));
